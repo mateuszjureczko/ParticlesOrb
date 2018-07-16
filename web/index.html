@@ -8,48 +8,74 @@
 	</head>
 	<body>
 		<script src="js/three.js"></script>
+
 		<script>
 			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 400 );
 			camera.position.set(0,0,0);
 			var renderer = new THREE.WebGLRenderer();
+		//	composer = new THREE.EffectComposer( renderer );
+		//	composer.addPass( new THREE.RenderPass( scene, camera ) );
+
+
+
 			//taking size of webbrowser.
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-			
-			
+
+	//	composer = new THREE.EffectComposer( renderer );
+						//	composer.addPass( new THREE.RenderPass( scene, camera ) );
+
+				//		hblur = new THREE.ShaderPass( THREE.HorizontalBlurShader );
+					//		composer.addPass( hblur );
+
+				//	vblur = new THREE.ShaderPass( THREE.VerticalBlurShader );
+					//		vblur.renderToScreen = true;
+					//		composer.addPass( vblur );
+
+
 			var geometry = new THREE.SphereGeometry(70, 64, 64,);
-			
-			material = new THREE.ParticleBasicMaterial();
+	//		geometry.verticesNeedUpdate = true;
+	//		geometry.elementsNeedUpdate = true;
+		//	geometry.morphTargetsNeedUpdate = true;
+	//		geometry.uvsNeedUpdate = true;
+	//		geometry.normalsNeedUpdate = true;
+	//		geometry.colorsNeedUpdate = true;
+	//		geometry.tangentsNeedUpdate = true;
+
+			material = new THREE.ParticleBasicMaterial({size:0.9, transparent:true, fog:true});
 			particleSystem = new THREE.ParticleSystem(geometry,material);
 			scene.add(particleSystem);
-			
-			
+			scene.fog = new THREE.FogExp2( 0x000000, 0.002 );
+		//	scene.add(FogExp2("red",0.5));
+
+
 			console.log(geometry.vertices[0]);
 			function messWithStuff(){
 			for(var k = 0; k < this.geometry.vertices.length; k++){
-			geometry.vertices[k].x += (Math.random()-0.5)*5;
-			geometry.vertices[k].y += (Math.random()-0.5)*5;
-				
+			geometry.vertices[k].x += (Math.random()-0.5)*15;
+			geometry.vertices[k].y += (Math.random()-0.5)*10;
+			geometry.vertices[k].z += (Math.random()-0.5)*5;
+
 			}
 			}
 			messWithStuff();
-			
-			
-			
-			
+
+
+
+
 		///	scene.add( cube );
 
 			camera.position.z = 200;
 
 			var animate = function () {
 				requestAnimationFrame( animate );
-				messWithStuff();
-				camera.position.z += 0.1;
-				camera.rotation.y +=0.001;
+		//		messWithStuff();
+				//camera.position.z += 0.1;
+				particleSystem.rotation.y +=0.001;
 				//particleSystem.position.z -=0.1;
-			
+
 
 				renderer.render( scene, camera );
 			};
